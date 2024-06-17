@@ -145,6 +145,7 @@ id lower_card
 id map
 id motionLayout
 id nav_host_fragment
+id navigation_bar
 id recyclerCard
 id recyclerCategory
 id recyclerClassif

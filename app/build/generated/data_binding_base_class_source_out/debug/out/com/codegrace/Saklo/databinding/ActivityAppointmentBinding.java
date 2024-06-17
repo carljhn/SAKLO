@@ -4,12 +4,12 @@ package com.codegrace.Saklo.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.codegrace.Saklo.R;
@@ -19,10 +19,13 @@ import java.lang.String;
 
 public final class ActivityAppointmentBinding implements ViewBinding {
   @NonNull
-  private final RelativeLayout rootView;
+  private final ConstraintLayout rootView;
 
   @NonNull
   public final AppCompatButton btnHome;
+
+  @NonNull
+  public final ActivityNavBarBinding navigationBar;
 
   @NonNull
   public final Toolbar toolbar;
@@ -30,17 +33,19 @@ public final class ActivityAppointmentBinding implements ViewBinding {
   @NonNull
   public final TextView tvHospitals;
 
-  private ActivityAppointmentBinding(@NonNull RelativeLayout rootView,
-      @NonNull AppCompatButton btnHome, @NonNull Toolbar toolbar, @NonNull TextView tvHospitals) {
+  private ActivityAppointmentBinding(@NonNull ConstraintLayout rootView,
+      @NonNull AppCompatButton btnHome, @NonNull ActivityNavBarBinding navigationBar,
+      @NonNull Toolbar toolbar, @NonNull TextView tvHospitals) {
     this.rootView = rootView;
     this.btnHome = btnHome;
+    this.navigationBar = navigationBar;
     this.toolbar = toolbar;
     this.tvHospitals = tvHospitals;
   }
 
   @Override
   @NonNull
-  public RelativeLayout getRoot() {
+  public ConstraintLayout getRoot() {
     return rootView;
   }
 
@@ -71,6 +76,13 @@ public final class ActivityAppointmentBinding implements ViewBinding {
         break missingId;
       }
 
+      id = R.id.navigation_bar;
+      View navigationBar = ViewBindings.findChildViewById(rootView, id);
+      if (navigationBar == null) {
+        break missingId;
+      }
+      ActivityNavBarBinding binding_navigationBar = ActivityNavBarBinding.bind(navigationBar);
+
       id = R.id.toolbar;
       Toolbar toolbar = ViewBindings.findChildViewById(rootView, id);
       if (toolbar == null) {
@@ -83,8 +95,8 @@ public final class ActivityAppointmentBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityAppointmentBinding((RelativeLayout) rootView, btnHome, toolbar,
-          tvHospitals);
+      return new ActivityAppointmentBinding((ConstraintLayout) rootView, btnHome,
+          binding_navigationBar, toolbar, tvHospitals);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));
