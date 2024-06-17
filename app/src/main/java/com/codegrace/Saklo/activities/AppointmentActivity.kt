@@ -6,7 +6,10 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.FragmentActivity
 import com.codegrace.Saklo.R
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,14 +39,13 @@ class AppointmentActivity : FragmentActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
 
         setupBottomNavigation()
-
+        changeStatusBarTextColor()
         checkLocationPermission()
     }
 
     private fun setupBottomNavigation() {
         bottomNav = findViewById(R.id.bottomNav)
 
-        // Set the Appointment menu item as checked
         bottomNav.menu.findItem(R.id.btnAppoint).isChecked = true
 
         bottomNav.setOnItemSelectedListener {
@@ -53,7 +55,6 @@ class AppointmentActivity : FragmentActivity(), OnMapReadyCallback {
                     true
                 }
                 R.id.btnAppoint -> {
-                    // No need to start AppointmentActivity again since we're already here
                     true
                 }
                 R.id.btnRemedies -> {
@@ -77,6 +78,14 @@ class AppointmentActivity : FragmentActivity(), OnMapReadyCallback {
             }
             bottomNav.setBackgroundResource(themeColor)
         }
+    }
+
+    private fun changeStatusBarTextColor() {
+        val decorView: View = window.decorView
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        val windowInsetsController = WindowInsetsControllerCompat(window, decorView)
+        windowInsetsController.isAppearanceLightStatusBars =
+            resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK != android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
     private fun checkLocationPermission() {
